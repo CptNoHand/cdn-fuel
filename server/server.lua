@@ -69,6 +69,7 @@ RegisterNetEvent("cdn-fuel:server:PayForFuel", function(amount, purchasetype)
 	end
 	local fuelprice = (Config.CostMultiplier * 1)
 	player.Functions.RemoveMoney(moneyremovetype, total, "Gasoline @ " ..fuelprice.." / L")
+	exports['ap-government']:chargeCityTax(Player.PlayerData.source, "Vehicle", tax, "bank")
 end)
 
 RegisterNetEvent("cdn-fuel:server:purchase:jerrycan", function(purchasetype)
@@ -87,6 +88,7 @@ RegisterNetEvent("cdn-fuel:server:purchase:jerrycan", function(purchasetype)
 	if Player.Functions.AddItem("jerrycan", 1, false, info) then -- Dont remove money or giveitem if weight > maxweight!
 		TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['jerrycan'], "add") 
 		Player.Functions.RemoveMoney(moneyremovetype, total, "Purchased Jerry Can.")
+		exports['ap-government']:chargeCityTax(Player.PlayerData.source, "Vehicle", tax, "bank")
 	end
 
 end)
