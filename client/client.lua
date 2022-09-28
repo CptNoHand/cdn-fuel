@@ -15,6 +15,7 @@ local props = {
 	'prop_gas_pump_old3',
 }
 local refueling = false
+local PaidForFuel = false
 -- Debug ---
 if Config.FuelDebug then
 	RegisterCommand('setfuel0', function()
@@ -84,7 +85,6 @@ if Config.LeaveEngineRunning then
 			if IsPedInAnyVehicle(ped, false) and IsControlPressed(2, 75) and not IsEntityDead(ped) then
 				local vehicle = GetVehiclePedIsIn(ped, true)
 				local enginerunning = GetIsVehicleEngineRunning(vehicle)
-				if enginerunning then print('true') else print('false') end
 				Wait(900)
 				if IsPedInAnyVehicle(ped, false) and IsControlPressed(2, 75) and not IsEntityDead(ped) and GetPedInVehicleSeat(GetVehiclePedIsIn(PlayerPedId()), -1) == PlayerPedId() then
 					if enginerunning then SetVehicleEngineOn(vehicle, true, true, false) enginerunning = false end
@@ -95,7 +95,7 @@ if Config.LeaveEngineRunning then
     end)
 end
 
-if Config.ShowNearestGasStationOnly and not Config.ShowAllGasStations then
+if Config.ShowNearestGasStationOnly then
 	CreateThread(function()
 		local currentGasBlip = 0
 		while true do
@@ -118,14 +118,12 @@ if Config.ShowNearestGasStationOnly and not Config.ShowAllGasStations then
 	end)
 end
 
-if Config.ShowAllGasStations and not Config.ShowNearestGasStationOnly then
+if Config.ShowAllGasStations then
 	CreateThread(function()
 		for _, gasStationCoords in pairs(Config.GasStationsBlips) do
 			CreateBlip(gasStationCoords)
 		end
 	end)
-else
-	if Config.FuelDebug then print("You must only have either Config.ShowAllGasStation or Config.ShowNearestGasStationOnly") end
 end
 
 CreateThread(function()
@@ -235,6 +233,26 @@ AddEventHandler('onResourceStop', function(resource)
 	end
 end)
 
+if Config.RenewedPhonePayment then
+	RegisterNetEvent('cdn-fuel:client:phone:PayForFuel', function(amount)
+		local cost = amount * Config.CostMultiplier
+		local tax = GlobalTax(cost)
+		local total = math.ceil(cost + tax)
+		local success = exports['qb-phone']:PhoneNotification("Gas Station", 'Total Cost: $'..total, 'fas fa-gas-pump', '#9f0e63', "NONE", 'fas fa-check-circle', 'fas fa-times-circle')
+		if success then
+			if QBCore.Functions.GetPlayerData().money['bank'] <= (GlobalTax(amount) + amount) then
+				QBCore.Functions.Notify("You don't have enough money!", "error")
+			else
+				TriggerServerEvent('cdn-fuel:server:PayForFuel', cost, "bank")
+				RefuelPossible = true
+				RefuelPossibleAmount = amount
+				RefuelPurchaseType = "bank"
+				RefuelCancelled = false
+			end
+		end
+	end)
+end
+
 RegisterNetEvent('cdn-fuel:client:FinalMenu', function(purchasetype)
 	local money = nil
 	if purchasetype == "bank" then money = QBCore.Functions.GetPlayerData().money['bank'] elseif purchasetype == 'cash' then money = QBCore.Functions.GetPlayerData().money['cash'] end
@@ -271,8 +289,6 @@ RegisterNetEvent('cdn-fuel:client:FinalMenu', function(purchasetype)
 				QBCore.Functions.Notify("You can't afford this!", 'error', 7500)
 			end
 		end
-
-
 	end
 end)
 
@@ -318,8 +334,21 @@ RegisterNetEvent('cdn-fuel:client:SendMenuToServer', function()
 end)
 
 RegisterNetEvent('cdn-fuel:client:RefuelVehicle', function(data)
-	purchasetype = data.purchasetype
-	local amount = data.fuelamounttotal
+	if not Config.RenewedPhonePayment then 
+		purchasetype = data.purchasetype 
+	elseif data.purchasetype == "cash" then 
+		purchasetype = "cash"
+	else
+		purchasetype = RefuelPurchaseType
+	end
+	if Config.FuelDebug then print("Purchase Type: "..purchasetype) end
+	if not Config.RenewedPhonePayment then 
+		amount = data.fuelamounttotal 
+	elseif data.purchasetype == "cash" then
+		amount = data.fuelamounttotal
+	elseif not data.fuelamounttotal then
+		amount = RefuelPossibleAmount 
+	end
 	if not holdingnozzle then return end
 	if amount < 1 then return end
 	if amount < 10 then fuelamount = string.sub(amount, 1, 1) else fuelamount = string.sub(amount, 1, 2) end
@@ -349,14 +378,25 @@ RegisterNetEvent('cdn-fuel:client:RefuelVehicle', function(data)
 					Wait(Config.RefuelTime)
 					Refuelamount = Refuelamount + 1
 					if Cancelledrefuel then
-						local refillCost = (math.ceil(Refuelamount) * Config.CostMultiplier)
-						TriggerServerEvent('cdn-fuel:server:PayForFuel', refillCost, purchasetype)
+						local refillCostB4Tax = math.ceil(Refuelamount * Config.CostMultiplier)
+						if Config.RenewedPhonePayment and purchasetype == "bank" then
+							local remainingamount = (amount - Refuelamount)
+							MoneyToGiveBack = (GlobalTax(remainingamount) + (remainingamount * Config.CostMultiplier))
+							TriggerServerEvent("cdn-fuel:server:phone:givebackmoney", MoneyToGiveBack)
+						else
+							TriggerServerEvent('cdn-fuel:server:PayForFuel', refillCostB4Tax, purchasetype)
+						end
 						local curfuel = GetFuel(vehicle)
 						local finalfuel = (curfuel + Refuelamount)
-						if finalfuel > 99 and finalfuel < 100 then
+						if finalfuel >= 98 and finalfuel <= 100 then
 							SetFuel(vehicle, 100)
 						else
 							SetFuel(vehicle, finalfuel)
+						end
+						if Config.RenewedPhonePayment then
+							RefuelCancelled = true
+							RefuelPossibleAmount = 0
+							RefuelPossible = false
 						end
 						Cancelledrefuel = false
 					end
@@ -383,6 +423,9 @@ RegisterNetEvent('cdn-fuel:client:RefuelVehicle', function(data)
 					end
 					StopAnimTask(ped, "timetable@gardener@filling_can", "gar_ig_5_filling_can", 3.0, 3.0, -1, 2, 0, 0, 0, 0)
 					TriggerServerEvent("InteractSound_SV:PlayOnSource", "fuelstop", 0.4)
+					RefuelCancelled = true
+					RefuelPossibleAmount = 0
+					RefuelPossible = false
 				end,
 				function()
 					SetBusy(false)
@@ -390,6 +433,7 @@ RegisterNetEvent('cdn-fuel:client:RefuelVehicle', function(data)
 					Cancelledrefuel = true
 					StopAnimTask(ped, "timetable@gardener@filling_can", "gar_ig_5_filling_can", 3.0, 3.0, -1, 2, 0, 0, 0, 0)
 					TriggerServerEvent("InteractSound_SV:PlayOnSource", "fuelstop", 0.4)
+					
 				end)
 		end
 	else return end
@@ -452,12 +496,34 @@ CreateThread(function()
 		"seat_dside_r",
 		"engine",
 	}
-
 	exports['qb-target']:AddTargetBone(bones, {
 		options = {
 			{
 				type = "client",
-				event = "cdn-fuel:client:SendMenuToServer",
+				action = function ()
+					if Config.RenewedPhonePayment then
+						if not RefuelPossible then 
+							TriggerEvent('cdn-fuel:client:SendMenuToServer') 
+						else 
+							if Config.RenewedPhonePayment then
+								if not Cancelledrefuel and not RefuelCancelled then
+									if RefuelPossibleAmount then
+										local purchasetype = "bank"
+										local fuelamounttotal = tonumber(RefuelPossibleAmount)
+										TriggerEvent('cdn-fuel:client:RefuelVehicle', purchasetype, fuelamounttotal) 
+									else
+										QBCore.Functions.Notify('You have to fuel more than 0!', 'error', 7500)
+									end
+								end
+							else
+
+							end
+						end
+					else
+						TriggerEvent('cdn-fuel:client:SendMenuToServer')
+					end
+
+				end,
 				icon = "fas fa-gas-pump",
 				label = "Insert Nozzle",
 				canInteract = function()
@@ -465,7 +531,7 @@ CreateThread(function()
 						return true
 					end
 				end
-			}
+			},
 		},
 		distance = 1.5,
 	})
