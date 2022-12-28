@@ -28,7 +28,7 @@ Config.RefuelAnim = 'fire' -- Used for Syphoning & Jerry Can
 Config.UseJerryCan = true -- Enable the Jerry Can functionality. Will only work if properly installed.
 Config.JerryCanCap = 50 -- Maximum amount (in L) the jerrycan can fit! (Default: 50L)
 Config.JerryCanPrice = 500 -- + Tax of 15%
-Config.JerryCanGas = 0 -- The amount of Gas that the Jerry Can you purchase comes with. This should not be bigger that your Config.JerryCanCap!
+Config.JerryCanGas = 50 -- The amount of Gas that the Jerry Can you purchase comes with. This should not be bigger that your Config.JerryCanCap!
 -- End Jerry Can --
 -- Phone Stuff -- 
 Config.RenewedPhonePayment = false -- When true, payments will be sent to the players phone with a notification, giving them the opportunity to accept or decline payment. If the cancel after paying for fuel, money will be returned. 
@@ -52,7 +52,8 @@ Config.Blacklist = { -- Blacklist certain vehicles, mostly electric vehicles. Us
 	"imorgon",
 	"dilettante",
 	"khamelion",
-    "teslapd"
+    "teslapd",
+    "wheelchair",
 }
 Config.Classes = { -- Class multipliers. If you want SUVs to use less fuel, you can change it to anything under 1.0, and vise versa.
 	[0] = 0.4, -- Compacts
