@@ -1,18 +1,18 @@
 -- Variables
 local QBCore = exports['qb-core']:GetCoreObject()
 
-function GlobalTax(value)
+-- Functions
+local function GlobalTax(value)
 	local tax = (value / 100 * Config.GlobalTax)
 	return tax
 end
 
---- Events ---
-
+--- Events
 if Config.RenewedPhonePayment then
 	RegisterNetEvent('cdn-fuel:server:phone:givebackmoney', function(amount)
 		local src = source
 		local player = QBCore.Functions.GetPlayer(src)
-		player.Functions.AddMoney("bank", math.ceil(amount), "Refund, for Unused Fuel @ Gas Station!")
+		player.Functions.AddMoney("bank", math.ceil(amount), Lang:t("phone_refund_payment_label"))
 	end)
 end
 
@@ -24,14 +24,14 @@ RegisterNetEvent("cdn-fuel:server:OpenMenu", function(amount, inGasStation, hasW
 	local tax = GlobalTax(amount)
 	local total = math.ceil(amount + tax)
 	local fuelamounttotal = (amount / FuelPrice)
-	if amount < 1 then TriggerClientEvent('QBCore:Notify', src, "You can't refuel a negative amount!", 'error') return end
+	if amount < 1 then TriggerClientEvent('QBCore:Notify', src, Lang:t("more_than_zero"), 'error') return end
 	if inGasStation == true and not hasWeapon then
 		if Config.RenewedPhonePayment and purchasetype == "bank" then
 			TriggerClientEvent("cdn-fuel:client:phone:PayForFuel", src, fuelamounttotal)
 		else
 			TriggerClientEvent('qb-menu:client:openMenu', src, {
 				{
-					header = "Gas Station",
+					header = Lang:t("menu_refuel_header"),
 					isMenuHeader = true,
 					icon = "fas fa-gas-pump",
 				},
@@ -39,12 +39,12 @@ RegisterNetEvent("cdn-fuel:server:OpenMenu", function(amount, inGasStation, hasW
 					header = "",
 					icon = "fas fa-info-circle",
 					isMenuHeader = true,
-					txt = 'The total cost is going to be: $'..total..' including taxes.' ,
+					txt = Lang:t("menu_purchase_station_header_1")..total..Lang:t("menu_purchase_station_header_2") ,
 				},
 				{
-					header = "Confirm",
+					header = Lang:t("menu_purchase_station_confirm_header"),
 					icon = "fas fa-check-circle",
-					txt = 'I would like to purchase the fuel.' ,
+					txt = Lang:t("menu_refuel_accept"),
 					params = {
 						event = "cdn-fuel:client:RefuelVehicle",
 						args = {
@@ -54,9 +54,12 @@ RegisterNetEvent("cdn-fuel:server:OpenMenu", function(amount, inGasStation, hasW
 					}
 				},
 				{
-					header = "Cancel",
-					txt = "I actually don't want fuel anymore.", 
+					header = Lang:t("menu_header_close"),
+					txt = Lang:t("menu_refuel_cancel"), 
 					icon = "fas fa-times-circle",
+					params = {
+						event = "qb-menu:closeMenu",
+					}
 				},
 			})
 		end
@@ -76,8 +79,8 @@ RegisterNetEvent("cdn-fuel:server:PayForFuel", function(amount, purchasetype, Fu
 	elseif purchasetype == "cash" then
 		moneyremovetype = "cash"
 	end
-	local payString = "Gasoline @ " ..FuelPrice.." / L"
-	if electric then payString = "Gasoline @ " ..FuelPrice.." / L" end
+	local payString = Lang:t("menu_pay_label_1") ..FuelPrice..Lang:t("menu_pay_label_2")
+	if electric then payString = Lang:t("menu_electric_payment_label_1") ..FuelPrice..Lang:t("menu_electric_payment_label_2") end
 	Player.Functions.RemoveMoney(moneyremovetype, math.ceil(total), payString)
 	exports['ap-government']:chargeCityTax(Player.PlayerData.source, "Vehicle", tax, "bank")
 
@@ -93,18 +96,15 @@ RegisterNetEvent("cdn-fuel:server:purchase:jerrycan", function(purchasetype)
 	elseif purchasetype == "cash" then
 		moneyremovetype = "cash"
 	end
-	local info = {
-		gasamount = Config.JerryCanGas,
-	}
+	local info = {gasamount = Config.JerryCanGas,}
 	if Player.Functions.AddItem("jerrycan", 1, false, info) then -- Dont remove money if AddItem() not possible!
 		TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['jerrycan'], "add") 
-		Player.Functions.RemoveMoney(moneyremovetype, total, "Purchased Jerry Can.")
+		Player.Functions.RemoveMoney(moneyremovetype, total, Lang:t("jerry_can_payment_label"))
 		exports['ap-government']:chargeCityTax(Player.PlayerData.source, "Vehicle", tax, "bank")
 	end
-
 end)
 
--- Jerry Can --
+--- Jerry Can
 if Config.UseJerryCan then
 	QBCore.Functions.CreateUseableItem("jerrycan", function(source, item)
 		local src = source
@@ -112,8 +112,7 @@ if Config.UseJerryCan then
 	end)
 end
 
-
---- Syphoning ---
+--- Syphoning
 if Config.UseSyphoning then
 	QBCore.Functions.CreateUseableItem("syphoningkit", function(source, item)
 		local src = source
@@ -146,10 +145,9 @@ RegisterNetEvent('cdn-syphoning:callcops', function(coords)
     TriggerClientEvent('cdn-syphoning:client:callcops', -1, coords)
 end)
 
---- Updates ---
+--- Update Alerts
 local updatePath
 local resourceName
-
 
 local function checkVersion(err, responseText, headers)
     local curVersion = LoadResourceFile(GetCurrentResourceName(), "version")
@@ -161,7 +159,6 @@ local function checkVersion(err, responseText, headers)
         print("^1----------------------------------------------------------------------------------^7")
     end
 end
-
 
 Citizen.CreateThread(function()
 	updatePath = "/CodineDev/cdn-fuel"

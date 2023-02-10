@@ -1,26 +1,25 @@
 Config = {}
 Config.FuelDebug = false -- Used for debugging, although there are not many areas in yet (Default: false) + Enables Setfuel Commands (0, 50, 100). 
 Config.ShowNearestGasStationOnly = true -- When enabled, only the nearest gas stations will be shown on the map.
-Config.ShowAllGasStations = false -- When enabled, all gas station blips will be shown on map, instead of just when near them Will only work if show nearest gas stations only is disabled.
 Config.LeaveEngineRunning = true -- When true, the vehicle's engine will be left running upon exit if the player *HOLDS* F.
-Config.VehicleBlowUp = true -- When true, there will be a configurable chance of the vehicle blowing up, if you fuel while the engine is on.
+Config.VehicleBlowUp = false -- When true, there will be a configurable chance of the vehicle blowing up, if you fuel while the engine is on.
 Config.BlowUpChance = 5 -- Percentage for Chance of Engine Explosion (Default: 5% or 5) 
 Config.CostMultiplier = 3.0 -- Amount to multiply 1 by. This indicates fuel price. (Default: $3.0/l or 3.0)
 Config.GlobalTax = 10.0 -- The tax, in %, that people will be charged at the pump. (Default: 15% or 15.0)
 Config.FuelNozzleExplosion = true -- When true, it enables the fuel pump exploding when players run away with the nozzle.
 Config.FuelDecor = "_FUEL_LEVEL" -- Do not touch! (Default: "_FUEL_LEVEL")
 Config.RefuelTime = 600 -- Highly recommended to leave at 600. This value will be multiplied times the amount the player is fueling for the progress bar and cancellation logic! DON'T GO BELOW 250, performance WILL drop!
-Config.FuelTargetExport = true -- This is only used to fix this issue: https://github.com/CodineDev/cdn-fuel/issues/3. <br> <br> If you don't have this issue and haven't installed this exports in qb-target, then this should be false. Otherwise there will be an error.
+Config.FuelTargetExport = false -- This is only used to fix this issue: https://github.com/CodineDev/cdn-fuel/issues/3. <br> <br> If you don't have this issue and haven't installed this exports in qb-target, then this should be false. Otherwise there will be an error.
 
 -- Syphoning --
-Config.UseSyphoning = true -- Follow the Syphoning Install Guide to enable this option!
-Config.SyphonDebug = true -- Used for Debugging the syphon portion!
+Config.UseSyphoning = false -- Follow the Syphoning Install Guide to enable this option!
+Config.SyphonDebug = false -- Used for Debugging the syphon portion!
 Config.SyphonFuelDecor = Config.FuelDecor -- Do not touch! (Default: "_FUEL_LEVEL")
 Config.SyphonKitCap = 50 -- Maximum amount (in L) the syphon kit can fit!
 Config.SyphonPoliceCallChance = 25 -- Math.Random(1, 100) Default: 25% 
 Config.SyphonDispatchSystem = "qb-default" -- Options: "ps-dispatch", "qb-dispatch", "qb-default" (just blips) or "custom" (Custom: you must configure yourself!)
 
---- Jerry Can ----- 
+--- Jerry Can -----
 Config.UseJerryCan = true -- Enable the Jerry Can functionality. Will only work if properly installed.
 Config.JerryCanCap = 50 -- Maximum amount (in L) the jerrycan can fit! (Default: 50L)
 Config.JerryCanPrice = 750 -- The price of a jerry can, not including tax. 
@@ -49,6 +48,7 @@ Config.PlayerControlledFuelPrices = true -- This gives you the option to disable
 Config.GasStationNameChanges = true -- This gives you the option to disable people being able to change the name of their gas station, only recommended if it becomes a problem.
 Config.NameChangeMinChar = 8 -- This is the minimum length that a Gas Station's name must be.
 Config.NameChangeMaxChar = 25 -- This is the maximum length that a Gas Station's name must be.
+Config.WaitTime = 100 -- This is the wait time after callbacks, if you are having issues with menus not popping up, or being greyed out, up this to around ~300, it is not recommended to go over ~750, as menus will get slower and more unresponsive the higher you go. (Fixes this issue: https://www.shorturl.at/eqS19)
 
 -- Phone --
 Config.RenewedPhonePayment = false -- When true, payments will be sent to the players phone with a notification, giving them the opportunity to accept or decline payment. If the cancel after paying for fuel, money will be returned. 
@@ -77,7 +77,7 @@ Config.ElectricVehicles = { -- The list of Electric Vehicles in the base game. Y
     "khamelion",
 }
 Config.ElectricSprite = 620 -- This is for when the player is in an electric charger, the blips with change to this sprite. (Sprite with a car with a bolt going through it: 620)
-
+Config.ElectricChargerModel = true -- If you wish, you can set this to false to add your own props, or use a ymap for the props instead.
 -- Basic Configuration Settings
 
 Config.NoFuelUsage = { -- This is for you to put vehicles that you don't want to use fuel. 
@@ -492,13 +492,13 @@ Config.GasStations = { -- Configuration options for various gas station related 
     },
     [17] = {
         zones = {
-            vector2(1768.56, 3328.41),
-            vector2(1780.68, 3335.98),
-            vector2(1789.02, 3319.32),
-            vector2(1776.52, 3314.39)
+            vector2(1774.24, 3308.71),
+            vector2(1752.65, 3345.83),
+            vector2(1784.47, 3357.95),
+            vector2(1808.71, 3321.21)
         },
-        minz = 40.0,
-        maxz = 42.6,
+        minz = 39.0,
+        maxz = 44.6,
         pedmodel = "a_m_m_indian_01",
         cost = 100000,
         shutoff = false,
@@ -738,8 +738,32 @@ Config.GasStations = { -- Configuration options for various gas station related 
         electricchargercoords = vector4(-341.63, -1459.39, 29.76, 271.73),
         label = "Alta Street Globe Oil",
     },
+    -- [28] = { -- Gabz Ottos Autos Location, Line In If Needed.
+    --     zones = {
+    --         vector2(794.27795410156, -802.88677978516),
+    --         vector2(794.19073486328, -784.70434570313),
+    --         vector2(834.78155517578, -784.63250732422),
+    --         vector2(843.86151123047, -801.45819091797),
+    --         vector2(823.64239501953, -801.69488525391),
+    --         vector2(811.66571044922, -803.15899658203)
+    --     },
+    --     minz = 26.0,
+    --     maxz = 27.0,
+    --     pedmodel = "a_m_m_indian_01",
+    --     cost = 100000,
+    --     shutoff = false,
+    --     pedcoords = {
+    --         x = 819.1,
+    --         y = -774.63,
+    --         z = 25.23,
+    --         h = 83.86,
+    --     },
+    --     electriccharger = nil,
+    --     electricchargercoords = vector4(837.7554, -793.623, 25.23, 105.22),
+    --     label = "Ottos Autos Globe Oil",
+    -- },
     -- Example of a New Location
-    -- [28] = {
+    -- [29] = {
     --     zones = {
     --          https://skyrossm.github.io/PolyZoneCreator/ 
     --          Use this for a quick way to add a Gas Station, instead of doing it in game, make sure you included the entire area, including the ped and electric pumps if used.       
