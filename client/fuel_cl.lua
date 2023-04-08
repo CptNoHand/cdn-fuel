@@ -426,42 +426,42 @@ RegisterNetEvent('cdn-fuel:client:FinalMenu', function(purchasetype)
 			local wholetankcost = (FuelPrice * ReserveLevels)
 			local wholetankcostwithtax = math.ceil(FuelPrice * ReserveLevels + GlobalTax(wholetankcost))
 			fuel = exports['qb-input']:ShowInput({
-				header = "Select the Amount of Fuel<br>Current Price: $" ..
-				FuelPrice .. " / Liter <br> Current Fuel: " .. finalfuel .. " Liters <br> Full Tank Cost: $" ..
+				header = "Wählen Sie die Kraftstoffmenge aus<br>Derzeitiger Preis: $" ..
+				FuelPrice .. " / Liter <br> Kraftstoffmenge: " .. finalfuel .. " Liters <br> Kosten: $" ..
 				wholetankcostwithtax .. "",
 				submitText = Lang:t("input_insert_nozzle"),
 				inputs = { {
 					type = 'number',
 					isRequired = true,
 					name = 'amount',
-					text = 'Only '..ReserveLevels..' Liters are available.'
+					text = 'Nur '..ReserveLevels..' Liter verfügbar.'
 				}}
 			})
 		else
 			fuel = exports['qb-input']:ShowInput({
-				header = "Select the Amount of Fuel<br>Current Price: $" ..
-				FuelPrice .. " / Liter <br> Current Fuel: " .. finalfuel .. " Liters <br> Full Tank Cost: $" ..
+				header = "Wählen Sie die Kraftstoffmenge aus<br>Derzeitiger Preis: $" ..
+				FuelPrice .. " / Liter <br> Kraftstoffmenge: " .. finalfuel .. " Liters <br> Kosten: $" ..
 				wholetankcostwithtax .. "",
 				submitText = Lang:t("input_insert_nozzle"),
 				inputs = { {
 					type = 'number',
 					isRequired = true,
 					name = 'amount',
-					text = 'The Tank Can Hold ' .. maxfuel .. ' More Liters.'
+					text = 'In den Tank passen noch ' .. maxfuel .. ' Liter.'
 				}}
 			})	
 		end
 	else
 		fuel = exports['qb-input']:ShowInput({
-			header = "Select the Amount of Fuel<br>Current Price: $" ..
-			FuelPrice .. " / Liter <br> Current Fuel: " .. finalfuel .. " Liters <br> Full Tank Cost: $" ..
+			header = "Wählen Sie die Kraftstoffmenge aus<br>Derzeitiger Preis: $" ..
+			FuelPrice .. " / Liter <br> Kraftstoffmenge: " .. finalfuel .. " Liters <br> Kosten: $" ..
 			wholetankcostwithtax .. "",
 			submitText = Lang:t("input_insert_nozzle"),
 			inputs = { {
 				type = 'number',
 				isRequired = true,
 				name = 'amount',
-				text = 'The Tank Can Hold ' .. maxfuel .. ' More Liters.'
+				text = 'In den Tank passen noch ' .. maxfuel .. ' Liter.'
 			}}
 		})	
 	end
