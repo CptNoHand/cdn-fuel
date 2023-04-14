@@ -1,26 +1,27 @@
 Config = {}
 Config.FuelDebug = false -- Used for debugging, although there are not many areas in yet (Default: false) + Enables Setfuel Commands (0, 50, 100). 
-Config.PolyDebug = false -- Used for showing debug zones for PolyZones. (Default: False)
+Config.PolyDebug = false -- Enables Polyzone Debugging to see PolyZones!
 Config.ShowNearestGasStationOnly = true -- When enabled, only the nearest gas stations will be shown on the map.
 Config.LeaveEngineRunning = true -- When true, the vehicle's engine will be left running upon exit if the player *HOLDS* F.
 Config.VehicleBlowUp = true -- When true, there will be a configurable chance of the vehicle blowing up, if you fuel while the engine is on.
 Config.BlowUpChance = 5 -- Percentage for Chance of Engine Explosion (Default: 5% or 5)
 Config.CostMultiplier = 3.0 -- Amount to multiply 1 by. This indicates fuel price. (Default: $3.0/l or 3.0)
-Config.GlobalTax = 10.0 -- The tax, in %, that people will be charged at the pump. (Default: 15% or 15.0)
+Config.GlobalTax = 15.0 -- The tax, in %, that people will be charged at the pump. (Default: 15% or 15.0)
 Config.FuelNozzleExplosion = true -- When true, it enables the fuel pump exploding when players run away with the nozzle. Highly recommeded to be false.
+Config.FuelDecor = "_FUEL_LEVEL" -- Do not touch! (Default: "_FUEL_LEVEL")
 Config.RefuelTime = 600 -- Highly recommended to leave at 600. This value will be multiplied times the amount the player is fueling for the progress bar and cancellation logic! DON'T GO BELOW 250, performance WILL drop!
 Config.FuelTargetExport = false -- DO NOT USE WITH OX_TARGET! This is only used to fix this qb-target issue: https://github.com/CodineDev/cdn-fuel/issues/3. <br> <br> If you don't have this issue and haven't installed this exports in qb-target, then this should be false. Otherwise there will be an error.
 
 -- 2.1.0 Update
 Config.EmergencyServicesDiscount = {
     ['enabled'] = true, -- Enables Emergency Services Getting a discount based on the value below for Refueling & Electricity Charging Cost
-    ['discount'] = 23, -- % Discount off of price (before tax).
-    ['emergency_vehicles_only'] = true, -- Only allows discounts to be applied to Emergency Vehicles
+    ['discount'] = 25, -- % Discount off of price.
+    ['emergency_vehicles_only'] = false, -- Only allows discounts to be applied to Emergency Vehicles
     ['ondutyonly'] = true, -- Discount only applies while on duty.
     ['job'] = {
         "police",
-        "sasp",
-        "trooper",
+        "sheriff",
+        "detectives",
         "ambulance",
     }
 }
@@ -40,8 +41,7 @@ Config.RopeType = { -- Options: 1-2-3-4-5; 1: Khaki Color, Kind of Thick, 2: Ver
 }
 Config.FaceTowardsVehicle = true -- Ped will turn towards the entity's boot bone for refueling, sometimes can result in incorrect nozzle placement when refueling.
 Config.VehicleShutoffOnLowFuel = { -- If enabled, vehicles will turn off when the reach 0 fuel. This works well in conjuction with disallowing people to turn on a vehicle with 0 fuel.
-    ['enabled'] = true, -- Is the loop for shutting vehicles off when the fuel level is low turned on?
-    ['shutOffLevel'] = 5, -- At this fuel level, the vehicle will shut off. Default: 0, Recommended: 0-5.
+    ['shutOffLevel'] = 0, -- At this fuel level, the vehicle will shut off. Default: 0, Recommended: 0-5.
     ['sounds'] = {
         ['enabled'] = true, -- Are Sounds Enabled when vehicle has no fuel?
         -- Find sound banks and sounds here: https://pastebin.com/A8Ny8AHZ.
@@ -53,9 +53,8 @@ Config.VehicleShutoffOnLowFuel = { -- If enabled, vehicles will turn off when th
 -- 2.1.0 End
 
 -- Phone --
-Config.RenewedPhonePayment = true -- Enables use of Renewed-Phone Payment System and Notifications
+Config.RenewedPhonePayment = false -- Enables use of Renewed-Phone Payment System and Notifications
 Config.NPWD = false -- Enables phone notifications for New-Phone-Who-Dis.
-
 
 -- Syphoning --
 Config.UseSyphoning = true -- Follow the Syphoning Install Guide to enable this option!
@@ -77,7 +76,6 @@ Config.JerryCanAnimDict = 'weapon@w_sp_jerrycan' -- Used for Syphoning & Jerry C
 Config.JerryCanAnim = 'fire' -- Used for Syphoning & Jerry Can
 Config.RefuelAnimation = "gar_ig_5_filling_can" -- This is for refueling and charging.
 Config.RefuelAnimationDictionary = "timetable@gardener@filling_can" -- This is for refueling and charging.
-
 
 --- Player Owned Gas (Gasoline) Ergonomic Refueling Stations (Poggers) ---
 Config.PlayerOwnedGasStationsEnabled = true -- When true, peds will be located at all gas stations, and players will be able to talk with peds & purchase gas stations, having to manage fuel supplies.
@@ -174,10 +172,10 @@ Config.AirAndWaterVehicleFueling = {
         [1] = {
             ['PolyZone'] = {
                 ['coords'] = {
-                    vector2(455.01, -986.64),
-                    vector2(443.77, -986.87),
-                    vector2(444.06, -975.21),
-                    vector2(454.93, -975.38),
+                    vector2(439.96, -973.0),
+                    vector2(458.09, -973.04),
+                    vector2(458.26, -989.47),
+                    vector2(439.58, -989.94),
                 },
                 ['minmax'] = {
                     ['min'] = 40,
