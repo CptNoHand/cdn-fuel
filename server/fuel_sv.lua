@@ -116,7 +116,7 @@ RegisterNetEvent("cdn-fuel:server:PayForFuel", function(amount, purchasetype, Fu
 	local payString = Lang:t("menu_pay_label_1") ..FuelPrice..Lang:t("menu_pay_label_2")
 	if electric then payString = Lang:t("menu_electric_payment_label_1") ..FuelPrice..Lang:t("menu_electric_payment_label_2") end
 	Player.Functions.RemoveMoney(moneyremovetype, math.ceil(total), payString)
-	exports['ap-government']:chargeCityTax(Player.PlayerData.source, "Vehicle", tax, "bank")
+	exports['ap-government']:chargeCityTax(Player.PlayerData.source, "Vehicle", total, "bank")
 end)
 
 RegisterNetEvent("cdn-fuel:server:purchase:jerrycan", function(purchasetype)
