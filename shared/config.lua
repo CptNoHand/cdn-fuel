@@ -124,6 +124,13 @@ Config.ElectricChargerModel = true -- If you wish, you can set this to false to 
 
 Config.NoFuelUsage = { -- This is for you to put vehicles that you don't want to use fuel. 
     "wheelchair",
+    "bmx",
+    "cruiser",
+    "fixter",
+    "scorcher",
+    "tribike",
+    "tribike2",
+    "tribike3",
 }
 
 Config.Classes = { -- Class multipliers. If you want SUVs to use less fuel, you can change it to anything under 1.0, and vise versa.
