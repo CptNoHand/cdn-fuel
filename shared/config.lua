@@ -120,25 +120,58 @@ Config.OneStationPerPerson = true -- This prevents players that already own one 
 --- Electric Vehicles
 Config.ElectricVehicleCharging = true -- When true, electric vehicles will actually consume resources and decrease 'Fuel / Battery' while driving. This means players will have to recharge their vehicle!
 Config.ElectricChargingPrice = 4 -- Per "KW". This value is multiplied times the amount of electricity someone put into their vehicle, to constitute the final cost of the charge. Players whom own the gas station will not recieve the money from electric charging.
-Config.ElectricVehicles = { -- The list of Electric Vehicles in the base game. You can add more if needed, use the Vehicle's Spawn Name
-    "surge",
-    "iwagen",
-    "voltic",
-    "voltic2",
-    "raiden",
-    "cyclone",
-    "tezeract",
-    "neon",
-    "omnisegt",
-    "iwagen",
-    "caddy",
-    "caddy2",
-    "caddy3",
-    "airtug",
-    "rcbandito",
-    "imorgon",
-    "dilettante",
-    "khamelion",
+Config.ElectricVehicles = { -- List of Electric Vehicles in the Base Game.
+    ["surge"] = {
+        isElectric = true,
+    },
+    ["iwagen"] = {
+        isElectric = true,
+    },
+    ["voltic"] = {
+        isElectric = true,
+    },
+    ["voltic2"] = {
+        isElectric = true,
+    },
+    ["raiden"] = {
+        isElectric = true,
+    },
+    ["cyclone"] = {
+        isElectric = true,
+    },
+    ["tezeract"] = {
+        isElectric = true,
+    },
+    ["neon"] = {
+        isElectric = true,
+    },
+    ["omnisegt"] = {
+        isElectric = true,
+    },
+    ["caddy"] = {
+        isElectric = true,
+    },
+    ["caddy2"] = {
+        isElectric = true,
+    },
+    ["caddy3"] = {
+        isElectric = true,
+    },
+    ["airtug"] = {
+        isElectric = true,
+    },
+    ["rcbandito"] = {
+        isElectric = true,
+    },
+    ["imorgon"] = {
+        isElectric = true,
+    },
+    ["dilettante"] = {
+        isElectric = true,
+    },
+    ["khamelion"] = {
+        isElectric = true,
+    },
 }
 Config.ElectricSprite = 620 -- This is for when the player is in an electric charger, the blips with change to this sprite. (Sprite with a car with a bolt going through it: 620)
 Config.ElectricChargerModel = true -- If you wish, you can set this to false to add your own props, or use a ymap for the props instead.
@@ -146,14 +179,18 @@ Config.ElectricChargerModel = true -- If you wish, you can set this to false to 
 -- Basic Configuration Settings
 -- Turn on Config.FuelDebug and use this command to get the name for here: getVehNameForBlacklist
 Config.NoFuelUsage = { -- This is for you to put vehicles that you don't want to use fuel.
-    "wheelchair",
-    "bmx",
-    "cruiser",
-    "fixter",
-    "scorcher",
-    "tribike",
-    "tribike2",
-    "tribike3",
+    ["bmx"] = {
+        blacklisted = true
+    },
+    ["wheelchair"] = {
+        blacklisted = true
+    },
+    ["cruiser"] = {
+        blacklisted = true
+    },
+    ["fixter"] = {
+        blacklisted = true
+    },
 }
 
 Config.Classes = { -- Class multipliers. If you want SUVs to use less fuel, you can change it to anything under 1.0, and vise versa.
@@ -212,7 +249,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 50.0
                 },
             },
-            ['draw_text'] = "[G] Refuel Helicopter",
+            ['draw_text'] = "[G] Heli betanken",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = true,
@@ -244,7 +281,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 78.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Helicopter",
+            ['draw_text'] = "[G] Heli betanken",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = true,
@@ -272,7 +309,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 50.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Helicopter",
+            ['draw_text'] = "[G] Heli betanken",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = true,
@@ -300,7 +337,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 19.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Aircraft",
+            ['draw_text'] = "[G] Flugzeug betanken",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = false,
@@ -328,7 +365,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 19.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Aircraft",
+            ['draw_text'] = "[G] Flugzeug betanken",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = false,
@@ -356,7 +393,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 10.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Aircraft",
+            ['draw_text'] = "[G] Flugzeug betanken",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = false,
@@ -384,7 +421,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 10.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Aircraft",
+            ['draw_text'] = "[G] Flugzeug betanken",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = false,
@@ -412,7 +449,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 8.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Watercraft",
+            ['draw_text'] = "[G] Boot betanken",
             ['type'] = 'water',
             ['whitelist'] = {
                 ['enabled'] = false,
@@ -440,7 +477,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 37.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Aircraft",
+            ['draw_text'] = "[G] Boot betanken",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = true,
@@ -468,7 +505,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 37.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Aircraft",
+            ['draw_text'] = "[G] Flugzeug betanken",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = true,
@@ -496,7 +533,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 47.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Aircraft",
+            ['draw_text'] = "[G] Flugzeug betanken",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = false,
@@ -524,7 +561,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 37.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Watercraft",
+            ['draw_text'] = "[G] Boot betanken",
             ['type'] = 'water',
             ['whitelist'] = {
                 ['enabled'] = false,
@@ -556,7 +593,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 42.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Helicopter",
+            ['draw_text'] = "[G] Heli betanken",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = true,
@@ -588,7 +625,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 10.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Helicopter",
+            ['draw_text'] = "[G] Heli betanken",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = false,
@@ -616,7 +653,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 18.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Helicopter",
+            ['draw_text'] = "[G] Heli betanken",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = false,
@@ -644,7 +681,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 18.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Helicopter",
+            ['draw_text'] = "[G] Heli betanken",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = false,
@@ -672,7 +709,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 47.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Helicopter",
+            ['draw_text'] = "[G] Heli betanken",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = false,
@@ -701,7 +738,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 47.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Aircraft",
+            ['draw_text'] = "[G] Flugzeug betanken",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = false,
@@ -734,7 +771,7 @@ Config.AirAndWaterVehicleFueling = {
         --             ['max'] = 38.67
         --         },
         --     },
-        --     ['draw_text'] = "[G] Refuel Aircraft",
+        --     ['draw_text'] = "[G] Flugzeug betanken",
         --     ['type'] = 'air',
         --     ['whitelist'] = {
         --         ['enabled'] = false,
@@ -1338,10 +1375,10 @@ Config.GasStations = { -- Configuration options for various gas station related 
     },
     [26] = {
         zones = {
-            vector2(-1838.64, 787.12),
-            vector2(-1796.97, 821.97),
-            vector2(-1770.08, 797.73),
-            vector2(-1813.26, 762.50)
+            vector2(-1820.41, 767.31),
+            vector2(-1775.49, 802.95),
+            vector2(-1798.5, 828.42),
+            vector2(-1841.71, 791.66)
         },
         minz = 136.64,
         maxz = 139.9,
